@@ -181,6 +181,10 @@ deploying new antennas.
 
   <br>
   <button onclick="restartDemo()">Restart Demo</button>
+  <br><br>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLScEU_B_hk2yp05y58rSLeGhfrSPNTuops-LCf8F06qRsglsew/viewform?usp=header" target="_blank">
+    <button>Take the Feedback Questionnaire 📝</button>
+  </a>
 </div>
 
 <script>
@@ -220,8 +224,14 @@ function selectQuality(q) {
 }
 
 function capacityDecision(localAvailable) {
-  usedDRSO = !localAvailable;
-  showScreen(localAvailable ? 4 : 3);
+  usedDRSO = !localAvailable;  // true if overloaded → need blockchain
+  if (localAvailable) {
+    // Direct to energy screen without blockchain transaction
+    showScreen(5);
+  } else {
+    // Need blockchain step first
+    showScreen(3);
+  }
 }
 
 function approveDRSO() {
@@ -229,8 +239,11 @@ function approveDRSO() {
 }
 
 function processTransaction() {
-  tokens -= (quality === 'UHD' ? 10 : quality === 'HD' ? 7 : 4);
-  document.getElementById('tokens').innerText = tokens;
+  if (usedDRSO) {
+    // Only reduce tokens if blockchain/DRSO is used
+    tokens -= (quality === 'UHD' ? 10 : quality === 'HD' ? 7 : 4);
+    document.getElementById('tokens').innerText = tokens;
+  }
   showScreen(5);
 }
 
@@ -264,4 +277,3 @@ function selectPurpose(p) {
 
 </body>
 </html>
-
