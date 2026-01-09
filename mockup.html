@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TruE-MAN Mockup</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+    background-image: url('https://i.imgur.com/KJTqfq7.png');
+    background-size: cover;       /* cover whole page */
+    background-position: top center;  /* center it */
+    background-repeat: no-repeat;
+  }
+
+  .screen {
+    display: none;
+    border: 2px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 520px;
+    background-color: white;
+  }
+
+  .active { display: block; }
+
+  button {
+    padding: 10px 20px;
+    margin: 8px;
+    background-color: #2f80ed;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #1c63b8;
+  }
+
+  .metrics { font-weight: bold; margin: 10px 0; }
+
+  .box {
+    border: 1px dashed #999;
+    padding: 8px;
+    margin: 6px;
+    background-color: #f7f9fc;
+    background-image: url('/home/diona/Pictures/1.png');
+  }
+
+  h2 { color: #2f80ed; }
+
+  /* Backgrounds per screen */
+  .bg-intro { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+  .bg-user { background: #e8f5e9; }
+  .bg-orchestration { background: #e3f2fd; }
+  .bg-drso { background: #ede7f6; }
+  .bg-blockchain { background: #f5f5f5; }
+  .bg-energy { background: #e8f5e9; }
+  .bg-summary { background: linear-gradient(135deg, #f1f8e9, #e0f2f1); }
+</style>
+</head>
+
+<body>
+
+<h1>TruE-MAN Interactive UX Mockup</h1>
+
+<!-- Screen -1 -->
+<div id="screen-1" class="screen active">
+  <h2>About this Mockup</h2>
+  <p>
+This interactive mockup represents the TruE-MAN service flow in a simplified,
+user-friendly manner. It is used to evaluate usability and user experience
+for different stakeholder profiles.
+  </p>
+  <p>
+No real network resources are used. All steps simulate the architecture
+described in D1–D3.
+  </p>
+  <button onclick="showScreen(0)">Start Demo</button>
+</div>
+
+<!-- Screen 0 -->
+<div id="screen0" class="screen bg-intro">
+  <h2>Select Your Role</h2>
+  <p>This helps evaluate usability for different stakeholder profiles.</p>
+  <button onclick="selectRole('End User')">End User (Student / Consumer)</button>
+  <button onclick="selectRole('Operator')">Network Operator</button>
+  <button onclick="selectRole('Provider')">Service Provider</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<!-- Screen 1 -->
+<div id="screen1" class="screen bg-user">
+  <h2>1. Service Request</h2>
+  <p>This step represents a user requesting a video service.</p>
+
+  <p><strong>Streaming purpose:</strong></p>
+  <button onclick="selectPurpose('Lecture')">Lecture</button>
+  <button onclick="selectPurpose('Video Call')">Video Call</button>
+  <button onclick="selectPurpose('Entertainment')">Entertainment</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+
+<!-- Screen 1.5 -->
+<div id="screen1_5" class="screen bg-user">
+  <h2>1.5 Service Request: Quality</h2>
+  <p>Select the desired video quality.</p>
+  <button onclick="selectQuality('SD')">SD</button>
+  <button onclick="selectQuality('HD')">HD</button>
+  <button onclick="selectQuality('UHD')">UHD</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<!-- Screen 2 -->
+<div id="screen2" class="screen bg-orchestration">
+  <h2>2. OpenSlice Service Orchestration</h2>
+  <p>
+OpenSlice evaluates the SLA and checks whether local resources are sufficient.
+  </p>
+  <button onclick="capacityDecision(true)">Local Capacity Available</button>
+  <button onclick="capacityDecision(false)">Local Capacity Overloaded</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<!-- Screen 3 -->
+<div id="screen3" class="screen bg-drso">
+  <h2>3. Cross-Operator Resource Sharing</h2>
+  <p>
+Resources are requested from another operator via the TruE-MAN marketplace.
+  </p>
+  <button onclick="approveDRSO()">Approve Sharing (Blockchain)</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<!-- Screen 4 -->
+<div id="screen4" class="screen bg-blockchain">
+  <h2>4. Blockchain & SLA Enforcement</h2>
+  <p>
+A smart contract enforces the SLA and records the transaction.
+  </p>
+  <div class="metrics">Tokens Remaining: <span id="tokens">100</span></div>
+  <button onclick="processTransaction()">Confirm Transaction</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<!-- Screen 5 -->
+<div id="screen5" class="screen bg-energy">
+  <h2>5. Energy Monitoring 🌱</h2>
+  <p>
+Energy savings are achieved by reusing existing infrastructure instead of
+deploying new antennas.
+  </p>
+  <div class="metrics">Energy Saved: <span id="energy">0%</span></div>
+  <button onclick="updateEnergy()">Calculate Energy Impact</button>
+  <br><br>
+  <button onclick="goToSummary()">View Summary</button>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<!-- Screen 6 -->
+<div id="screen6" class="screen bg-summary">
+  <h2>6. Service Outcome & Overview</h2>
+
+  <div class="metrics">Role: <span id="finalRole"></span></div>
+  <div class="metrics">Purpose: <span id="finalPurpose"></span></div>
+  <div class="metrics">Quality: <span id="finalQuality"></span></div>
+  <div class="metrics">Tokens Remaining: <span id="finalTokens"></span></div>
+  <div class="metrics">Energy Saved: <span id="finalEnergy"></span></div>
+
+  <h3>System Interaction Overview</h3>
+  <div class="box">User Device</div>
+  <div class="box">OpenSlice Orchestrator</div>
+  <div class="box">Marketplace & DRSO</div>
+  <div class="box">Blockchain (SLA & Tokens)</div>
+  <div class="box">Monitoring & Energy Metrics</div>
+
+  <br>
+  <button onclick="restartDemo()">Restart Demo</button>
+</div>
+
+<script>
+let role = '';
+let purpose = '';
+let quality = '';
+let tokens = 100;
+let energy = 0;
+let usedDRSO = false;
+let screenHistory = [];
+
+function showScreen(num) {
+  const active = document.querySelector('.screen.active');
+  if (active) {
+    screenHistory.push(active.id);
+    active.classList.remove('active');
+  }
+  document.getElementById('screen' + num).classList.add('active');
+}
+
+function goBack() {
+  if (screenHistory.length === 0) return;
+
+  const prevScreenId = screenHistory.pop();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(prevScreenId).classList.add('active');
+}
+
+function selectRole(r) {
+  role = r;
+  showScreen(1);
+}
+
+function selectQuality(q) {
+  quality = q;
+  showScreen(2);
+}
+
+function capacityDecision(localAvailable) {
+  usedDRSO = !localAvailable;
+  showScreen(localAvailable ? 4 : 3);
+}
+
+function approveDRSO() {
+  showScreen(4);
+}
+
+function processTransaction() {
+  tokens -= (quality === 'UHD' ? 10 : quality === 'HD' ? 7 : 4);
+  document.getElementById('tokens').innerText = tokens;
+  showScreen(5);
+}
+
+function updateEnergy() {
+  energy += usedDRSO ? 25 : 10;
+  document.getElementById('energy').innerText = energy + '%';
+}
+
+function goToSummary() {
+  document.getElementById('finalRole').innerText = role;
+  document.getElementById('finalPurpose').innerText = purpose;
+  document.getElementById('finalQuality').innerText = quality;
+  document.getElementById('finalTokens').innerText = tokens;
+  document.getElementById('finalEnergy').innerText = energy + '%';
+  showScreen(6);
+}
+
+function restartDemo() {
+  role = purpose = quality = '';
+  tokens = 100;
+  energy = 0;
+  usedDRSO = false;
+  showScreen(-1);
+}
+
+function selectPurpose(p) {
+  purpose = p;
+  showScreen('1_5'); // go to the next step to select quality
+}
+</script>
+
+</body>
+</html>
+
